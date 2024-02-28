@@ -264,7 +264,7 @@ and generate_array_decoder = (config, loc, inner, path, definition) =>
     : [@metaloc loc]
       [%expr
         value
-        |> Js.Array.map(value => {
+        |> Js.Array.map(~f=value => {
              %e
              generate_parser(config, path, definition, inner)
            })

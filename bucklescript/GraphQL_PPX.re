@@ -20,7 +20,7 @@ let rec deepMerge = (json1: Js.Json.t, json2: Js.Json.t) => {
   | ((_, true, _), (_, true, _)) => (
       Obj.magic(
         Js.Array.mapi(
-          (el1, idx) => {
+          ~f=(el1, idx) => {
             let el2 = Js.Array.unsafe_get(Obj.magic(json2), idx);
             // it cannot be undefined, because two arrays should always be the
             // same length in graphql responses

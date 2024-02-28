@@ -147,7 +147,7 @@ let rec serialize_type =
             )
         )
       ]
-      : [%expr (a => Js.Array.map(b => {[%e serialize_type(inner)](b)}, a))]
+      : [%expr (a => Js.Array.map(~f=b => {[%e serialize_type(inner)](b)}, a))]
   | Type(Object(_)) => [%expr (v => None)]
   | Type(Union(_)) => [%expr (v => None)]
   | Type(Interface(_)) => [%expr (v => None)]
@@ -589,7 +589,7 @@ and generate_array_encoder = (config, loc, inner, path, definition) =>
     : [@metaloc loc]
       [%expr
         value
-        |> Js.Array.map(value => {
+        |> Js.Array.map(~f=value => {
              %e
              generate_serializer(config, path, definition, None, inner)
            })
@@ -925,8 +925,8 @@ and generate_object_encoder =
         (
           Obj.magic(
             Js.Array.reduce(
-              GraphQL_PPX.deepMerge,
-              Obj.magic(
+              ~f=GraphQL_PPX.deepMerge,
+              ~init=Obj.magic(
                 {
                   %e
                   do_obj_constructor();
